@@ -16141,7 +16141,56 @@ UniversalTab:AddButton({
 
 
 
+-- ServerScript: Zeus Hub X Logger (Webhook)
+-- Coloque em ServerScriptService
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Players = game:GetService("Players")
+local HttpService = game:GetService("HttpService")
+local MarketplaceService = game:GetService("MarketplaceService")
 
+local WEBHOOK_URL = "https://discord.com/api/webhooks/1437591560874361042/X9QQb3b5HoWIaDleWeAbV_R_s5Ar8JfokYv7xYVf0hjEo4oy2W5qij4Z5DO6QCLFA5QS"
+local eventName = "Zeus_Logger"
+local remote = ReplicatedStorage:WaitForChild(eventName)
+
+remote.OnServerEvent:Connect(function(player)
+    local playerName = player.Name
+    local userId = player.UserId
+    local accountAge = player.AccountAge
+    local placeName = MarketplaceService:GetProductInfo(game.PlaceId).Name
+    local placeId = game.PlaceId
+    local serverId = game.JobId
+    local gameLink = "https://www.roblox.com/games/"..placeId
+
+    local embed = {
+        title = "🔥 Zeus Hub - Novo jogador executou o script!",
+        color = 0x8A2BE2,
+        fields = {
+            {name = "👤 Jogador", value = playerName, inline = true},
+            {name = "🆔 UserId", value = tostring(userId), inline = true},
+            {name = "📅 Idade da conta", value = tostring(accountAge).." dias", inline = true},
+            {name = "💻 Executor", value = "Desconhecido", inline = true},
+            {name = "🎮 Jogo", value = placeName, inline = true},
+            {name = "PlaceId", value = tostring(placeId), inline = true},
+            {name = "Link", value = gameLink, inline = false},
+            {name = "🌐 Servidor (copiar)", value = tostring(placeId).."|"..tostring(serverId), inline = false},
+        },
+        footer = {text = "🔥 Zeus Hub • Enviado automaticamente"},
+        timestamp = os.date("!%Y-%m-%dT%H:%M:%SZ")
+    }
+
+    local data = {username = "KitK4t Hub Logger", embeds = {embed}}
+    local jsonData = HttpService:JSONEncode(data)
+
+    local success, err = pcall(function()
+        HttpService:PostAsync(WEBHOOK_URL, jsonData, Enum.HttpContentType.ApplicationJson)
+    end)
+
+    if not success then
+        warn("[Zeus] Falha ao enviar webhook:", err)
+    else
+        print("[Zeus] Log enviado para Discord com sucesso.")
+    end
+end)
 
 
 
